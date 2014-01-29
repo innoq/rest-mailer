@@ -1,53 +1,48 @@
 var https = require("https");
 var nconf = require('nconf');
-var mail = require('mail');
-
+var recipientHandler = require('./lib/recipient-handler');
 nconf.argv().env();
 nconf.file({ file: 'config.json' });
 
-mail.Mail({
-  host: nconf.get('mailer_smtp_host'),
-  username: nconf.get('mailer_smtp_user'),
-  password: nconf.get('mailer_smtp_pass')
-});
+// DUMMY CONTEXT
+var context = {
+    template: {
+        host: "localhost",
+        path: "/~ahe/mail.tpl",
+        auth: 'Basic ' + new Buffer(nconf.get('mailer_http_user') + ':' + nconf.get('mailer_http_pass')).toString('base64'),
+        parameters: {
+            weeklyUrl: "https://intern.innoq.com/blogging/weekly_statuses"
+        }
+    },
+    recipients: {
+        host: nconf.get('mailer_http_host'),
+        path: nconf.get('mailer_http_path'),
+        auth: 'Basic ' + new Buffer(nconf.get('mailer_http_user') + ':' + nconf.get('mailer_http_pass')).toString('base64')
+    }
+};
 
-console.log(JSON.stringify(mail));
-
-var auth = 'Basic ' + new Buffer(nconf.get('mailer_http_user') + ':' + nconf.get('mailer_http_pass')).toString('base64');
 
 var options = {
-    host: nconf.get('mailer_http_host'),
+    host: context.recipients.host,
     port: 443,
     method:"GET",
-    path: nconf.get('mailer_http_path')+'groups/jboss.json',
+    path: context.recipients.path,
     headers:{
-        "Authorization": auth
+        "Authorization": context.recipients.auth
     } 
 };
 
-https.get(options, function(res) {
-	res.setEncoding('utf-8');
-
-    var responseString = '';
-
-    res.on('data', function(data) {
-      responseString += data;
-    });
-
-    res.on('end', function() {
-      var responseObject = JSON.parse(responseString);
-            console.log(responseObject['member']);
-    });
+console.log("Options: " + JSON.stringify(options));
+https.get(options, function(res){ recipientHandler.extractRecipientList(res, context); }).on('error', function(error) {
+    console.error("Error retrieving: " + error.message);
 });
 
 
 // var handlebars = require('handlebars');
 // handlebars.registerHelper('link_to', function() {
-//   return "<a href='" + this.url + "'>" + this.body + "</a>";
+//   return "<a href='" + this.path + "'>" + this.body + "</a>";
 // });
 
-// var context = { posts: [{url: "/hello-world", body: "Hello World!"},
-// {url: "/hello-world2", body: "Hello World2!"}] };
 // var source = "<ul>{{#posts}}<li>{{{link_to}}}</li>{{/posts}}</ul>"
 
 // var template = handlebars.compile(source);
