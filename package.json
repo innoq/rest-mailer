@@ -1,0 +1,23 @@
+{
+  "name": "rest-mailer",
+  "version": "0.0.1",
+  "description": "This is a Mailer with a REST API.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "depedencies": {
+    "handlebars":"1.3.0",
+    "mail": "1.2.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "rest",
+    "api",
+    "mailer"
+  ],
+  "author": "",
+  "license": "MIT"
+}
