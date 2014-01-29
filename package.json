@@ -6,6 +6,10 @@
   "directories": {
     "test": "tests"
   },
+  "repository": {     
+    "type": "git",    
+    "url": "  git@github.com:phaus/rest-mailer.git"   
+  }, 
   "depedencies": {
     "handlebars":"1.3.0",
     "mail": "1.2.3"
