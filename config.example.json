@@ -1,0 +1,10 @@
+{
+	"mailer_smtp_user":"mailuser",
+	"mailer_smtp_pass":"mailpassword",
+	"mailer_smtp_host":"mail.example.com",
+	"mailer_http_host":"example.com",
+	"mailer_http_path":"/directory/",
+        "mailer_recipients_group":"users",
+	"mailer_http_pass":"httpuser",
+	"mailer_http_user":"httppassword"
+}

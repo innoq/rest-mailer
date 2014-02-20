@@ -8,7 +8,7 @@ nconf.file({ file: 'config.json' });
 var context = {
     template: {
         host: "localhost",
-        path: "/~ahe/mail.tpl",
+        path: "test/mail.tpl",
         auth: 'Basic ' + new Buffer(nconf.get('mailer_http_user') + ':' + nconf.get('mailer_http_pass')).toString('base64'),
         parameters: {
             weeklyUrl: "https://intern.innoq.com/blogging/weekly_statuses"
@@ -16,7 +16,7 @@ var context = {
     },
     recipients: {
         host: nconf.get('mailer_http_host'),
-        path: nconf.get('mailer_http_path'),
+        path: nconf.get('mailer_http_path')+'groups/'+nconf.get('mailer_recipients_group')+'.json',
         auth: 'Basic ' + new Buffer(nconf.get('mailer_http_user') + ':' + nconf.get('mailer_http_pass')).toString('base64')
     }
 };
